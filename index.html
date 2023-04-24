@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>What Is My IP</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <style>
+:root {
+  --twitter-blue: #1da1f2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--twitter-blue);
+  color: #fff;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #0d8bf0;
+  cursor: pointer;
+}
+
+.input-field {
+  display: block;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccd6dd;
+  border-radius: 4px;
+}
+
+.avatar {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #1c1e21;
+}
+
+.link {
+  color: var(--twitter-blue);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.link:hover {
+  opacity: 0.7;
+}
+
+  </style>
+</head>
+<body>
+	<div class="container">
+		<h1>What Is My IP</h1>
+		<p>Your IPv4 Address: <span id="ipv4"></span></p>
+		<p>Your IPv6 Address: <span id="ipv6"></span></p>
+		<button id="download" class="button">Download Log</button>
+    <p class="text">I do not log your IP Address. This project is open-sourced on my GitHub profile and you may look for any malicious code. You won't find any though.</p>
+
+	</div>
+	<script>
+		window.addEventListener('load', function () {
+			const ipv4 = document.getElementById('ipv4');
+			const ipv6 = document.getElementById('ipv6');
+			const downloadBtn = document.getElementById('download');
+
+			// Get IPv4 and IPv6 addresses
+			fetch('https://api64.ipify.org?format=json')
+				.then(res => res.json())
+				.then(data => ipv6.textContent = data.ip)
+				.catch(err => console.log(err));
+				
+			fetch('https://api.ipify.org?format=json')
+				.then(res => res.json())
+				.then(data => ipv4.textContent = data.ip)
+				.catch(err => console.log(err));
+
+			// Download log file
+			downloadBtn.addEventListener('click', function () {
+				const log = `IPv4: ${ipv4.textContent}\nIPv6: ${ipv6.textContent}\n`;
+				const filename = `ip_log_${Date.now()}.txt`;
+				const blob = new Blob([log], {type: 'text/plain'});
+				const url = URL.createObjectURL(blob);
+				const link = document.createElement('a');
+				link.href = url;
+				link.download = filename;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			});
+		});
+	</script>
+</body>
+</html>
